@@ -1,0 +1,6 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+#Ignore the generated folder. It's not needed cause you can just make it with prisma
+generated/

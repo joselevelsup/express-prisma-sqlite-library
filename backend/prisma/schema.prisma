@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Books {
+  id         Int          @id @default(autoincrement())
+  author     String
+  name       String
+  barcode    String
+  bookDetail BookDetails?
+  Checkouts  Checkouts[]
+}
+
+model Members {
+  id         Int         @id @default(autoincrement())
+  name String
+  cardNumber Int
+  email      String
+  age        Int
+  Checkouts  Checkouts[]
+}
+
+model BookDetails {
+  id              Int    @id @default(autoincrement())
+  yearBookWritten Int
+  genre           String
+  pageCount       Int
+  bookId          Int    @unique
+  book            Books  @relation(fields: [bookId], references: [id])
+}
+
+model Checkouts {
+  id             Int      @id @default(autoincrement())
+  bookId         Int
+  book           Books    @relation(fields: [bookId], references: [id])
+  memberId       Int
+  member         Members  @relation(fields: [memberId], references: [id])
+  dateCheckedOut DateTime @default(now())
+}
